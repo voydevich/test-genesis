@@ -7,7 +7,6 @@
 *.iml
 out
 gen
-dist
 node_modules
 none
 tmpl

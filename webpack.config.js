@@ -2,21 +2,28 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const config = require('./src/config');
 
 module.exports = {
     mode: 'production',
     entry: './src/index.js',
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: 'static/index.js',
+        filename: path.join('static', 'index.js'),
         publicPath: '/'
     },
     plugins: [
-        new MiniCssExtractPlugin({filename: 'main.[chunkhash].css'}),
+        new MiniCssExtractPlugin({
+            filename: path.join('static', 'css', `[name].css`),
+        }),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, './src/index.html'),
+            template: path.join(__dirname, 'src', 'index.html'),
             filename: 'index.html'
         }),
+        ...config.bot_list.map(bot => new HtmlWebpackPlugin({
+            template: path.join(__dirname, 'src', 'index.html'),
+            filename: path.join(bot.patch || '', `${bot.name}.html`),
+        }))
     ],
     module: {
         rules: [
@@ -35,25 +42,24 @@ module.exports = {
 
                 use: [
                     {
-                        loader: MiniCssExtractPlugin.loader
-                    },
-                    {
-                        loader: 'style-loader'
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            sourceMap: true
+                        }
                     },
                     {
                         loader: 'css-loader',
-
                         options: {
-                            sourceMap: true
+                            sourceMap: true,
+
                         }
                     },
                     {
                         loader: 'sass-loader',
-
                         options: {
                             sourceMap: true
                         }
-                    }
+                    },
                 ]
             }
         ]
@@ -77,6 +83,7 @@ module.exports = {
     },
     resolve: {
         alias: {
+            '@config': path.resolve(__dirname, 'src/config'),
             '@redux': path.resolve(__dirname, 'src/redux'),
             '@view': path.resolve(__dirname, 'src/view'),
             '@static': path.resolve(__dirname, 'src/static'),
@@ -89,8 +96,9 @@ module.exports = {
         }
     },
     devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-        compress: true,
+        historyApiFallback: {
+            historyApiFallback: true
+        },
         port: 9000
     }
 };
