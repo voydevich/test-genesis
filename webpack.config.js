@@ -8,9 +8,9 @@ module.exports = {
     mode: 'production',
     entry: './src/index.js',
     output: {
-        path: path.join(__dirname, 'docs'),
+        path: path.join(__dirname, 'dist'),
         filename: path.join('static', 'index.js'),
-        publicPath: '/test-genesis/'
+        publicPath: '/'
     },
     plugins: [
         new MiniCssExtractPlugin({
