@@ -10,7 +10,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'docs'),
         filename: path.join('static', 'index.js'),
-        publicPath: '/'
+        publicPath: '/test-genesis/'
     },
     plugins: [
         new MiniCssExtractPlugin({
