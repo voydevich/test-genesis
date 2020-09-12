@@ -9,8 +9,8 @@
     position: relative;
 
     display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-start;
+    flex-direction: column;
+    justify-content: flex-end;
     border-bottom: 2px solid #F2F2F2;
     border-top: 2px solid #F2F2F2;
 

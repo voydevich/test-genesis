@@ -12,6 +12,9 @@ import reducer from "@redux/reducer";
 import IndexPage from "@view";
 import BotPage from "@view/bot";
 import config from "@config";
+import Copyright from "@components/copyright/copyright";
+import Wrapper from "@components/wrapper/wrapper";
+import botPath from "./helpers/bot-path";
 
 
 const client = axios.create({
@@ -39,17 +42,20 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <Router>
-                    <Switch>
-                        <Route exact path={'/'} component={IndexPage}/>
-                        {config.bot_list.map((bot, key) => (
-                            <Route exact path={path.join('/', `${bot.path || ''}`, `${bot.name}`)} key={key}
-                                   render={(props) => (
-                                       <BotPage {...props} name={bot.name}/>
-                                   )}/>
-                        ))}
-                    </Switch>
+                    <Wrapper>
+                        <Switch>
+                            <Route exact path={'/'} component={IndexPage}/>
+                            {config.bot_list.map((bot, key) => (
+                                <Route exact path={`/${botPath(bot)}`} key={key}
+                                       render={(props) => (
+                                           <BotPage {...props} bot={bot}/>
+                                       )}/>
+                            ))}
+                        </Switch>
+                    </Wrapper>
                 </Router>
-            </Provider>)
+            </Provider>
+        )
     }
 }
 

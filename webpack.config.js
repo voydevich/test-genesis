@@ -1,8 +1,10 @@
+const botPath = require('./src/helpers/bot-path');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = require('./src/config');
+
 
 module.exports = {
     mode: 'production',
@@ -22,7 +24,7 @@ module.exports = {
         }),
         ...config.bot_list.map(bot => new HtmlWebpackPlugin({
             template: path.join(__dirname, 'src', 'index.html'),
-            filename: path.join(bot.patch || '', `${bot.name}.html`),
+            filename: `${botPath(bot)}.html`
         }))
     ],
     module: {
@@ -61,7 +63,32 @@ module.exports = {
                         }
                     },
                 ]
-            }
+            },
+            {
+                test: /\.svg$/,
+                include: [/react-svg/],
+                use: [
+                    {
+                        loader: "babel-loader",
+                    },
+                    {
+                        loader: "react-svg-loader",
+                        options: {
+                            jsx: true // true outputs JSX tags
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.(jpe?g|gif|png|svg)$/,
+                exclude: [/react-svg/],
+                use: [{
+                    loader: "file-loader",
+                    options: {
+                        name: 'static/image/[name].[ext]',
+                    }
+                }]
+            },
         ]
     },
 
@@ -88,13 +115,13 @@ module.exports = {
             '@view': path.resolve(__dirname, 'src/view'),
             '@static': path.resolve(__dirname, 'src/static'),
             '@selectors': path.resolve(__dirname, 'src/selectors'),
-
-            // '@components': path.resolve(__dirname, 'src/components'),
-            // '@database': path.resolve(__dirname, 'src/firebase'),
-            // '@react-svg': path.resolve(__dirname, 'src/static/react-svg'),
-            // '@router_config': path.resolve(__dirname, 'src/router_config.js'),
+            '@helpers': path.resolve(__dirname, 'src/helpers'),
+            '@components': path.resolve(__dirname, 'src/components'),
+            '@database': path.resolve(__dirname, 'src/database'),
+            '@react-svg': path.resolve(__dirname, 'src/static/react-svg'),
         }
     },
+    watch: true,
     devServer: {
         historyApiFallback: {
             historyApiFallback: true

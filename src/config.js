@@ -1,4 +1,8 @@
 const config = {
+    socket: {
+        url: 'http://localhost',
+        port: 3000
+    },
     bot_list: [
         {
             name: 'john_snow'
@@ -13,7 +17,7 @@ const config = {
             name: 'monica'
         },
         {
-            name: 'dallas '
+            name: 'dallas'
         },
     ]
 };
