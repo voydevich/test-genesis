@@ -22,17 +22,25 @@ const library = {
     martin: require(`./librery/martin`),
     monica: require(`./librery/monica`),
     sherlock: require(`./librery/sherlock`),
-}
+};
 
 
 io.on('connection', (socket) => {
+
     console.log('a user connected');
+
     config.bot_list.forEach(bot => {
+
         let timeout = {};
+
         socket.on(bot.name, (msg) => {
 
+            const self_message = createMessage(msg.sender, msg.message, msg.date);
+
+            io.emit(bot.name, self_message);
+
             database.collection(bot.name)
-                .add(createMessage(msg.sender, msg.message, msg.date))
+                .add(self_message)
                 .then(function (docRef) {
                     console.log("Document written with ID: ", docRef.id);
                 })
@@ -55,7 +63,7 @@ io.on('connection', (socket) => {
                     .add(new_message)
                     .then(function (docRef) {
                         console.log("Document written with ID: ", docRef.id);
-                        socket.emit(bot.name, new_message)
+                        io.emit(bot.name, new_message)
                     })
                     .catch(function (error) {
                         console.error("Error adding document: ", error);
@@ -69,7 +77,6 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     });
 });
-
 
 http.listen(config.socket.port, () => {
     console.log('listening on *:3000');
