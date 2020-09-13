@@ -6,8 +6,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = require('./src/config');
 
 
+const mode = process.argv.slice(-1)[0].split('=')[1] || 'production';
+
 module.exports = {
-    mode: 'production',
+    mode: mode,
     entry: './src/index.js',
     output: {
         path: path.join(__dirname, 'dist'),
@@ -121,7 +123,7 @@ module.exports = {
             '@react-svg': path.resolve(__dirname, 'src/static/react-svg'),
         }
     },
-    watch: true,
+    watch: mode !== 'production',
     devServer: {
         historyApiFallback: {
             historyApiFallback: true

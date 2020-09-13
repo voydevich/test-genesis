@@ -1,15 +1,21 @@
-# 🚀 Welcome to your new awesome project!
+# Установка компонентов
 
-This project has been created using **webpack scaffold**, you can now run
+
+```
+npm install 
+```
+
+# Сборка 
 
 ```
 npm run build
 ```
 
-or
+# Запуск сервера 
 
 ```
-yarn build
+npm run server
 ```
 
-to bundle your application
+[http://localhost:3000/](http://localhost:3000/)
+
